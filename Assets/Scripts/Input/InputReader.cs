@@ -8,8 +8,10 @@ using static Controls;
 [CreateAssetMenu(fileName = "New Input Reader", menuName = "Input/Input Reader")]
 public class InputReader : ScriptableObject, IPlayerActions
 {
-	public event Action<Vector2> moveEvent;
-	public event Action<bool> primaryFireEvent;
+	public event Action<Vector2> MoveEvent;
+	public event Action<bool> PrimaryFireEvent;
+
+	public Vector2 AimPosion {  get; private set; }
 
 	private Controls controls;
 
@@ -26,14 +28,19 @@ public class InputReader : ScriptableObject, IPlayerActions
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		moveEvent.Invoke(context.ReadValue<Vector2>());
+		MoveEvent.Invoke(context.ReadValue<Vector2>());
 	}
 
 	public void OnPrimaryFire(InputAction.CallbackContext context)
 	{
 		if (context.performed) 
-			primaryFireEvent?.Invoke(true);
+			PrimaryFireEvent?.Invoke(true);
 		else if (context.canceled)
-			primaryFireEvent?.Invoke(false);
+			PrimaryFireEvent?.Invoke(false);
+	}
+
+	public void OnAim(InputAction.CallbackContext context)
+	{
+		AimPosion = context.ReadValue<Vector2>();
 	}
 }
