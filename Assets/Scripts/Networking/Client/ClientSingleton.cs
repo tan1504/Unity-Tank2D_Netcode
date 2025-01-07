@@ -7,7 +7,7 @@ public class ClientSingleton : MonoBehaviour
 {
 	public static ClientSingleton instance;
 
-	public ClientGameManager gameManager;
+	public ClientGameManager gameManager {  get; private set; }
 
 	private void Awake()
 	{
