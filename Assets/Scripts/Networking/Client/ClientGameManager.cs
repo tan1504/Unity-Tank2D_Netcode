@@ -49,7 +49,7 @@ public class ClientGameManager
 
 		UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
 
-		RelayServerData serverData = new RelayServerData(allocation, "udp");    // protocol
+		RelayServerData serverData = new RelayServerData(allocation, "dtls");    // protocol
 		transport.SetRelayServerData(serverData);
 
 		NetworkManager.Singleton.StartClient();
