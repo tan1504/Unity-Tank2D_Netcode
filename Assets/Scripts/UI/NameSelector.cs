@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,7 +10,7 @@ public class NameSelector : MonoBehaviour
 	[SerializeField] private int minNameLength = 1;
 	[SerializeField] private int maxNameLength = 12;
 
-	private const string PlayerNameKey = "PlayerName";
+	public const string PlayerNameKey = "PlayerName";
 
 	private void Start()
 	{
@@ -29,7 +26,7 @@ public class NameSelector : MonoBehaviour
 
 	public void HandleNameChanged()
 	{
-		connectButton.interactable = 
+		connectButton.interactable =
 			nameField.text.Length >= minNameLength && nameField.text.Length <= maxNameLength;
 	}
 

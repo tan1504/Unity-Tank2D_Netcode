@@ -11,12 +11,16 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
+using System.Text;
 
 public class HostGameManager
 {
 	private Allocation allocation;
 	private string joinCode;
 	private string lobbyID;
+
+	private NetworkServer networkServer;
 
 	private const int MaxConnections = 20;
 	private const string GameSceneName = "Game";
@@ -62,7 +66,9 @@ public class HostGameManager
 					)
 				}
 			};
-			Lobby lobby = await Lobbies.Instance.CreateLobbyAsync("My Lobby", 
+
+			string playerName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Unknown");
+			Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(playerName + "'s "+"Lobby", 
 				MaxConnections, lobbyOptions);
 
 			lobbyID = lobby.Id;
@@ -74,6 +80,17 @@ public class HostGameManager
 			Debug.Log(e);
 			return;
 		}
+
+		networkServer = new NetworkServer(NetworkManager.Singleton);
+
+		UserData userData = new UserData
+		{
+			userName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Missing Name")
+		};
+		string payload = JsonUtility.ToJson(userData);
+		byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+
+		NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
 
 		NetworkManager.Singleton.StartHost();
 
